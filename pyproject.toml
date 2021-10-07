@@ -1,27 +1,28 @@
 [tool.poetry]
-name = "volttron-new-agent-template"
+name = "volttron-listener-agent"
 version = "0.1"
-description = "New VOLTTRON agent template"
-authors = ["author <author@company.org>"]
+description = "VOLTTRON listener agent.  Listenes to all published messages and writes to the log file."
+authors = ["Craig Allwardt <craig.allwardt@pnnl.gov>"]
 license = "Apache-2.0"
 packages = [
-    { include = "agentpackage" }
+    { include = "listener" }
 ]
-homepage = "https://github.com/VOLTTRON/volttron-new-agent-template"
-repository = "https://github.com/VOLTTRON/volttron-new-agent-template"
+homepage = "https://github.com/VOLTTRON/volttron-listener-agent"
+repository = "https://github.com/VOLTTRON/volttron-listener-agent"
 
-keywords = ["volttron", "agent"]
+keywords = ["volttron", "agent", "messagebus", "application"]
 
 [tool.poetry.dependencies]
 python = ">=3.6.2,<4.0"
-volttron-client = "^0.2.0"
+requests = "^2.26.0"
+volttron-client = "^0.3.2"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.13.0"
 pytest = "^6.2.4"
 black = "^21.6b0"
 flake8 = "^3.9.2"
-
+#volttron-client = {path="/repos/volttron-client", develop=true}
 
 
 [build-system]
