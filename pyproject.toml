@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "volttron-listener-agent"
-version = "0.1"
+version = "0.1.1"
 description = "VOLTTRON listener agent.  Listenes to all published messages and writes to the log file."
 authors = ["Craig Allwardt <craig.allwardt@pnnl.gov>"]
 license = "Apache-2.0"
@@ -24,6 +24,8 @@ black = "^21.6b0"
 flake8 = "^3.9.2"
 #volttron-client = {path="/repos/volttron-client", develop=true}
 
+[tool.poetry.scripts]
+listener="listener.agent:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
