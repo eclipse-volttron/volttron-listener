@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "volttron-listener-agent"
-version = "0.1.1"
+version = "0.1.2"
 description = "VOLTTRON listener agent.  Listenes to all published messages and writes to the log file."
 authors = ["Craig Allwardt <craig.allwardt@pnnl.gov>"]
 license = "Apache-2.0"
@@ -13,9 +13,9 @@ repository = "https://github.com/VOLTTRON/volttron-listener-agent"
 keywords = ["volttron", "agent", "messagebus", "application"]
 
 [tool.poetry.dependencies]
-python = ">=3.6.2,<4.0"
+python = ">=3.8,<4.0"
 requests = "^2.26.0"
-volttron-client = "^0.3.2"
+volttron-client = "^0.3.8"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.13.0"
