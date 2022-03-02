@@ -4,10 +4,30 @@ on:
   repository_dispatch:
     types: [downstream-testing]
 
+env:
+      REPO: volttron-core
+      OWNER: VOLTTRON
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      - name: Show all environment variables
+        run: env
+
       - name: Repository Dispatch Triggered
         run: |
-          echo "Workflow triggered successfully by repository dispatch action!"
+          echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event." 
+          echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
+          echo "Payload from upstream workflow: '${{ github.event.client_payload }}'
+
+      # get list artifacts from dispatch
+      # the REST endpoint to get the artifacts is hard-coded for now for testing
+      # TODO: this will change to env variables once it's confirmed that the downstream workflow can download artifacts from the upstream repo
+      - name: get list of artifacts from upstream repo
+        run: |
+          curl -H "Accept: application/vnd.github.v3+json" \
+          https://api.github.com/repos/VOLTTRON/volttron-core/actions/artifacts
+
+      # TODO: once we can get wheel from artifacts, run tests using the wheel
