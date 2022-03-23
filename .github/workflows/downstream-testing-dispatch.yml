@@ -5,12 +5,14 @@ on:
     types: [downstream-testing]
 
 env:
-      REPO: volttron-core
-      OWNER: VOLTTRON
+    REPO: volttron-core
+    OWNER: VOLTTRON
+    ZIP_ARTIFACT: artifact.zip
+    EVENT_TYPE: listener-downstream-testing-response
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build_test:
+    runs-on: ubuntu-20.04
 
     steps:
       - name: Show all environment variables
@@ -20,14 +22,51 @@ jobs:
         run: |
           echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event." 
           echo "Event '${{ github.event.action }}' received from '${{ github.event.client_payload.repository }}'"
-          echo "Payload from upstream workflow: '${{ github.event.client_payload }}'
+          echo "Payload repo dispatch: ${{ toJson(github.event.client_payload) }}"
 
-      # get list artifacts from dispatch
-      # the REST endpoint to get the artifacts is hard-coded for now for testing
-      # TODO: this will change to env variables once it's confirmed that the downstream workflow can download artifacts from the upstream repo
-      - name: get list of artifacts from upstream repo
+      # This task will get a list of artifacts generated from the 'run-downstream-tests.yml' workflow from volttron-core
+      # and then get the download url of the latest artifact
+      - name: Get download_url of volttron-core artifact
         run: |
-          curl -H "Accept: application/vnd.github.v3+json" \
-          https://api.github.com/repos/VOLTTRON/volttron-core/actions/artifacts
+          run_id=$(echo ${{ github.event.client_payload.run_id }})
+          echo "Upstream workflow run_id: ${run_id}"
+          workflow_run_url=$(echo "https://api.github.com/repos/${{ env.OWNER }}/${{ env.REPO }}/actions/runs/${run_id}")
+          echo "Getting workflow run information from: ${workflow_run_url}"
+          art_url=$(curl -H "Accept: application/vnd.github.v3+json" ${workflow_run_url} | jq '.artifacts_url')
+          echo "Artifact url: ${art_url}"
+          resp=$(echo ${art_url} | xargs curl) 
+          download_url=$(echo ${resp} | jq -r '.artifacts[0].archive_download_url')
+          echo "Getting artifact information from upstream workflow: ${download_url}}"
+          resp=$(echo "${download_url}" | xargs curl -o - -I -H "Accept: application/vnd.github.v3+json" --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}')
+          echo "DOWNLOAD_URL=$(echo $download_url)" >> $GITHUB_ENV
 
-      # TODO: once we can get wheel from artifacts, run tests using the wheel
+      # This task will download and unzip the wheel created from the 'run-downstream-tests.yml' workflow from volttron-core
+      - name: Download and unzip volttron-core wheel
+        run: |
+          echo "Downloading volttron-core wheel from: ${DOWNLOAD_URL}"
+          curl -o ${{ env.ZIP_ARTIFACT }} -J -L --header 'Authorization: Bearer ${{ secrets.ACTION_HOOK_TOKEN }}' --header "Accept: application/vnd.github.v3+json" ${DOWNLOAD_URL}
+          unzip ${{ env.ZIP_ARTIFACT }}
+          ls -lh
+
+      - name: Install volttron-core wheel
+        run: |
+          pip install *.whl
+
+      - name: Run Volttron
+        run: | 
+          volttron -vv -l volttron.log &
+          sleep 10
+          vctl status
+
+      # TODO: How should agent be installed? What tests should be run?
+      - name: Run tests for listener agent
+        run: |
+          echo "Running tests..."
+
+      - name: Send test result status to upstream repo
+        uses: peter-evans/repository-dispatch@v1.1.3
+        with:
+          token: ${{ secrets.ACTION_HOOK_TOKEN }}
+          repository: ${{ env.OWNER }}/${{ env.REPO }}
+          event-type: ${{ env.EVENT_TYPE }}
+          client-payload: '{"success": true}'
