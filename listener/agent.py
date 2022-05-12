@@ -45,8 +45,7 @@ import datetime
 from volttron import utils
 from volttron.utils.commands import vip_main
 from volttron.client.messaging.health import STATUS_GOOD
-from volttron.client.vip.agent import Agent, Core, PubSub, Health
-from volttron.client.subsystems import Health
+from volttron.client.vip.agent import Agent, Core, PubSub
 
 # from volttron.platform.agent import utils
 # from volttron.platform.messaging.health import STATUS_GOOD
@@ -73,7 +72,6 @@ class ListenerAgent(Agent):
         self._message = self.config.get('message', DEFAULT_MESSAGE)
         self._heartbeat_period = self.config.get('heartbeat_period',
                                                  DEFAULT_HEARTBEAT_PERIOD)
-
         runtime_limit = int(self.config.get('runtime_limit', 0))
         if runtime_limit and runtime_limit > 0:
             stop_time = datetime.datetime.now() + datetime.timedelta(seconds=runtime_limit)
@@ -97,8 +95,8 @@ class ListenerAgent(Agent):
         else:
             self._logfn = _log.info
 
-    @Core.receiver('onsetup')
-    def onsetup(self, sender, **kwargs):
+    @Core.receiver( 'onsetup')
+    def onsetup(self,            sender,                **kwargs):
         # Demonstrate accessing a value from the config file
         _log.info(self.config.get('message', DEFAULT_MESSAGE))
         self._agent_id = self.config.get('agentid')
@@ -110,8 +108,9 @@ class ListenerAgent(Agent):
             _log.debug(f"Heartbeat starting for {self.core.identity}, published every {self._heartbeat_period}s")
             self.vip.heartbeat.start_with_period(self._heartbeat_period)
             self.vip.health.set_status(STATUS_GOOD, self._message)
-        query = Query(self.core)
-        _log.info('query: %r', query.query('serverkey').get())
+        _log.info('How to do dynamic loaded functions?')
+        # query = Query(self.core)
+        # _log.info('query: %r', query.query('serverkey').get())
 
     @PubSub.subscribe('pubsub', '', all_platforms=True)
     def on_match(self, peer, sender, bus, topic, headers, message):
