@@ -46,7 +46,7 @@ from volttron import utils
 from volttron.utils.commands import vip_main
 from volttron.client.messaging.health import STATUS_GOOD
 from volttron.client.vip.agent import Agent, Core, PubSub, Health
-from volttron.client.subsystems import Health
+from volttron.client.vip.agent.subsystems.query import Query
 
 # from volttron.platform.agent import utils
 # from volttron.platform.messaging.health import STATUS_GOOD
