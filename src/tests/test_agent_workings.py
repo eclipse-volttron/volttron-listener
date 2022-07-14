@@ -3,7 +3,7 @@ from pathlib import Path
 
 from listener.agent import ListenerAgent, _log
 
-from testing.volttron import TestServer
+from volttrontesting import TestServer
 
 
 def test_agent():
