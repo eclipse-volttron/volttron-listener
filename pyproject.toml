@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "volttron-listener-agent"
+name = "volttron-listener"
 version = "0.3.0"
 description = "None"
 authors = ["Craig Allwardt <volttron@pnnl.gov>"]
