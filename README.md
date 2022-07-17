@@ -11,7 +11,7 @@ VOLTTRON is transitioning to using poetry as its base development and deployment
 
 ## Installation
 
-The volttron-utils package requires python >=3.6.2,<4.0 in order to run properly.  The volttron-utils package is available from pypi   To install into the current python environment use:
+In order to run the algorithm properly, the volttron-utils package requires python 3.6.2 or later versions until python 4.0.0. The volttron-utils package is available from pypi. To install the package into the current python environment, run:
 
 ```bash
 user@path$ pip install volttron-utils
@@ -19,7 +19,7 @@ user@path$ pip install volttron-utils
 
 ## Development
 
-To install development tools including pytest run
+To install development tools including pytest, run:
 
 ```bash
 user@path$ poetry install
@@ -66,7 +66,7 @@ Bumping version from 0.2.0 to 0.2.1-alpha.0
 
 ### Deployment to pypi
 
-A github action has been created to allow for pushing the wheel to pypi.  The requirement for it is to create a tag using v*.*.* for the version of the file.  This can be done on a release basis or by pushing a local tag to github.  To push a local tag to github in the correct format use the following.
+A github action has been created to allow for pushing the wheel to pypi.  The requirement for this github action is to create a tag using v*.*.* for the version of the file.  This can be done on a release basis or by pushing a local tag to github.  To push a local tag to github in the correct format, use the following.
 
 ```bash
 user@path$ git tag v0.0.1
