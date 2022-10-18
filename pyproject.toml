@@ -19,7 +19,7 @@ classifiers = [
 ]
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron = "^10.0.1a13"
+volttron = "^10.0.1a28"
 
 [tool.poetry.group.dev.dependencies]
 # formatting, quality, tests
@@ -34,7 +34,7 @@ mypy = "^0.942"
 coverage = "^6.3.2"
 Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
-volttron-testing = "^0.3.1a3"
+volttron-testing = "^0.3.1a7"
 
 [tool.yapfignore]
 ignore_patterns = [
@@ -54,5 +54,5 @@ split_before_logical_operator = true
 volttron-listener-agent = "listener.agent:main"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
+requires = ["poetry-core>=1.2.2"]
 build-backend = "poetry.core.masonry.api"
