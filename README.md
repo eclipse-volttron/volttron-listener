@@ -1,6 +1,6 @@
 ![Passing?](https://github.com/eclipse-volttron/volttron-listener/actions/workflows/run-tests.yml/badge.svg)
 
-VOLTTRON™ is an open source platform for distributed sensing and control. The platform provides services for collecting and storing data from buildings and devices and provides an environment for developing applications which interact with that data.
+The volttron-listener agent prints all message traffic across a VOLTTRON bus to standard out.
 
 ## Requirements
 
@@ -18,6 +18,9 @@ source env/bin/activate
 Installing volttron-listener requires a running volttron instance.
 
 ```shell
+pip install volttron
+
+# Start platform with output going to volttron.log
 volttron -vv -l volttron.log &
 ```
 
@@ -83,15 +86,6 @@ user@path$ poetry version prepatch
 
 # output
 Bumping version from 0.2.0 to 0.2.1-alpha.0
-```
-
-### Deployment to pypi
-
-A github action has been created to allow for pushing the wheel to pypi.  The requirement for it is to create a tag using v*.*.* for the version of the file.  This can be done on a release basis or by pushing a local tag to github.  To push a local tag to github in the correct format use the following.
-
-```shell
-git tag v0.0.1
-git push origin v0.0.1
 ```
 
 # Disclaimer Notice
