@@ -1,4 +1,5 @@
 ![Passing?](https://github.com/eclipse-volttron/volttron-listener/actions/workflows/run-tests.yml/badge.svg)
+[![pypi version](https://img.shields.io/pypi/v/volttron.svg)](https://pypi.org/project/volttron/)
 
 The volttron-listener agent prints all message traffic across a VOLTTRON bus to standard out.
 
