@@ -13,15 +13,15 @@ defaults:
 env:
   LANG: en_US.utf-8
   LC_ALL: en_US.utf-8
-  PYTHON_VERSION: '3.8'
-  # Will only deploy to pypi if this matches the
-  # ${{ $github.repository }} variable
-  DEPLOY_REPOSITORY: "VOLTTRON/volttron-listener"
+  PYTHON_VERSION: '3.10'
+  PROJECT_NAME: volttron-listener
+  RUNS_ON: ubuntu-22.04
 
 jobs:
 
   bump_version:
-    runs-on: ubuntu-20.04
+    environment: test_env
+    runs-on: ubuntu-22.04
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -53,11 +53,28 @@ jobs:
           installer-parallel: true
 
       #----------------------------------------------
+      #       load cached venv if cache exists
+      #----------------------------------------------
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v2.1.7
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      #----------------------------------------------
+      # install dependencies if cache does not exist
+      #----------------------------------------------
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      #----------------------------------------------
       # install your root project, if required
       #----------------------------------------------
       - name: Install library
         run: |
-          poetry install --no-interaction --without dev
+          poetry install --no-interaction
 
       #----------------------------------------------
       # bump version number for patch
@@ -68,9 +85,9 @@ jobs:
           # we need to remove the v from the begining of the tag.
           if ! $(git tag -l "v*" = ''); then
             # uses -V which is version sort to keep it monotonically increasing.
-            current_tag=$(git tag -l "v*" | sort --reverse -V |sed -n 1p)
+            current_tag=$(git tag -l "v*" | grep --invert-match '-' | sort --reverse -V  | sed -n 1p)
           else
-            current_tag=v0.3.0
+            current_tag=v0.4.0
           fi
 
           current_tag=${current_tag#?}
@@ -104,7 +121,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Publish pre-release to pypi
-        if: github.repository == ${{ env.DEPLOY_REPOSITORY }}
+        if: github.repository == 'eclipse-volttron/volttron-listener'
         run: |
           poetry config pypi-token.pypi ${{ secrets.PYPI_TOKEN }}
-          poetry publish # -r test-pypi
+          poetry publish

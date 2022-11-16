@@ -28,6 +28,7 @@ from unittest.mock import MagicMock
 
 import gevent
 from volttrontesting import PlatformWrapper
+from volttron.client.known_identities import CONTROL
 
 
 def test_startup_instance(volttron_instance: PlatformWrapper):
@@ -54,7 +55,7 @@ def test_startup_instance(volttron_instance: PlatformWrapper):
     listening.callback.reset_mock()
 
     assert listening.core.identity
-    agent_identity = listening.vip.rpc.call('control', 'agent_vip_identity', auuid).get(timeout=10)
+    agent_identity = listening.vip.rpc.call(CONTROL, 'agent_vip_identity', auuid).get(timeout=10)
     listening.vip.pubsub.subscribe(peer='pubsub',
                                    prefix='heartbeat/{}'.format(agent_identity),
                                    callback=listening.callback)
