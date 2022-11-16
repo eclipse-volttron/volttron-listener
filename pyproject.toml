@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "volttron-listener"
-version = "0.4.0"
+version = "0.5.0"
 description = "None"
 authors = ["Craig Allwardt <volttron@pnnl.gov>"]
 license = "Apache License 2.0"
@@ -19,7 +19,8 @@ classifiers = [
 ]
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron = "^10.0.1a28"
+volttron = "^10.0.1a30"
+volttron-testing = "^0.3.1a9"
 
 [tool.poetry.group.dev.dependencies]
 # formatting, quality, tests
@@ -34,7 +35,7 @@ mypy = "^0.942"
 coverage = "^6.3.2"
 Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
-volttron-testing = "^0.3.1a7"
+
 
 [tool.yapfignore]
 ignore_patterns = [
