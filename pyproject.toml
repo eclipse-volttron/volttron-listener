@@ -5,8 +5,8 @@ description = "None"
 authors = ["Craig Allwardt <volttron@pnnl.gov>"]
 license = "Apache License 2.0"
 readme = "README.md"
-repository = "https://github.com/craig8/volttron-listener-agent"
-homepage = "https://github.com/craig8/volttron-listener-agent"
+repository = "https://github.com/eclipse-volttron/volttron-listener"
+homepage = "https://github.com/eclipse-volttron/volttron-listener"
 keywords = []
 packages = [ { include = "listener", from = "src" } ]
 classifiers = [
@@ -19,7 +19,7 @@ classifiers = [
 ]
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron = "^10.0.1a33"
+volttron = "^10.0.1a34"
 
 [tool.poetry.group.dev.dependencies]
 # formatting, quality, tests
