@@ -19,7 +19,7 @@ classifiers = [
 ]
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron = "^10.0.1a34"
+volttron = ">=10.0.1a42,<11.0"
 
 [tool.poetry.group.dev.dependencies]
 # formatting, quality, tests
