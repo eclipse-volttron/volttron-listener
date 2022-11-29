@@ -35,7 +35,7 @@ def test_startup_instance(volttron_instance: PlatformWrapper):
     assert volttron_instance.is_running()
 
     # Agent install path based upon root of this repository
-    agent_pth = Path(__file__).parent.parent.parent.resolve().as_posix()
+    agent_pth = Path(__file__).parent.parent.resolve().as_posix()
 
     vi = volttron_instance
     assert vi is not None
