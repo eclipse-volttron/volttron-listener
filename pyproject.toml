@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "volttron-listener"
-version = "0.5.0"
-description = "None"
-authors = ["Craig Allwardt <volttron@pnnl.gov>"]
+version = "0.2.0-rc"
+description = "The volttron-listener agent allows publishing of message bus traffic to standard out."
+authors = ["VOLTTRON Team <volttron@pnnl.gov>"]
 license = "Apache License 2.0"
 readme = "README.md"
 repository = "https://github.com/eclipse-volttron/volttron-listener"
@@ -19,7 +19,7 @@ classifiers = [
 ]
 [tool.poetry.dependencies]
 python = ">=3.8,<4.0"
-volttron = ">=10.0.1a43,<11.0"
+volttron = ">=10.0.2rc0,<11.0"
 
 [tool.poetry.group.dev.dependencies]
 # formatting, quality, tests
@@ -35,7 +35,7 @@ coverage = "^6.3.2"
 pytest-cov = "^3.0.0"
 Sphinx = "^4.5.0"
 sphinx-rtd-theme = "^1.0.0"
-volttron-testing = "^0.3.1a10"
+volttron-testing = "^0.4.0rc0"
 
 [tool.yapfignore]
 ignore_patterns = [
