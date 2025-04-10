@@ -24,19 +24,29 @@
 
 import logging
 from pathlib import Path
+import os
+
+from volttron.types.agent_context import AgentOptions
 
 from listener.agent import ListenerAgent, _log
 
 from volttrontesting import TestServer
+import shutil
 
 
-def test_agent():
+def test_agent(monkeypatch):
     with open("/tmp/cfg.json", 'w') as fp:
         fp.write("{}")
 
     try:
-        la = ListenerAgent(config_path="/tmp/cfg.json")
+        os.environ['AGENT_VIP_IDENTITY'] = 'brown.cow'
         ts = TestServer()
+
+        la: ListenerAgent = ts.instantiate_agent(ListenerAgent, config_path="/tmp/cfg.json")
+
+        assert la.core
+
+        # la = ListenerAgent(config_path="/tmp/cfg.json")
         ts.connect_agent(agent=la, logger=_log)
         assert ts
         resp = ts.trigger_setup_event(identity_or_agent=la)
@@ -46,6 +56,7 @@ def test_agent():
         resp = ts.trigger_start_event(identity_or_agent=la)
         assert resp.response is None
         assert resp.called_method == 'onstart'
+
 
         ts.publish("atestmessage", message="Woot we got this")
         assert len(ts.get_published_messages()) == 1
@@ -59,6 +70,7 @@ def test_agent():
         assert len(ts.get_server_log()) > 1
 
     finally:
+        shutil.rmtree(TestServer.__volttron_home__)
         Path("/tmp/cfg.json").unlink(missing_ok=True)
 
 
@@ -67,8 +79,8 @@ def test_agent_pubsub():
         with open("/tmp/cfg.json", 'w') as fp:
             fp.write("{}")
 
-        la = ListenerAgent(config_path="/tmp/cfg.json")
         ts = TestServer()
+        la = ts.instantiate_agent(ListenerAgent, config_path="/tmp/cfg.json")
         ts.connect_agent(agent=la, logger=_log)
         assert ts
         resp = ts.trigger_setup_event(la)

@@ -21,29 +21,24 @@
 #
 # ===----------------------------------------------------------------------===
 # }}}
-
-
 import logging
 import sys
 from pprint import pformat
 import datetime
 
-from volttron import utils
+from volttron.client.vip.agent.subsystems.configstore import VALID_ACTIONS
 from volttron.utils.commands import vip_main
 from volttron.client.messaging.health import STATUS_GOOD
 from volttron.client.vip.agent import Agent, Core, PubSub
+from volttron.client.logs import setup_logging
+import volttron.utils as utils
 
-# from volttron.platform.agent import utils
-# from volttron.platform.messaging.health import STATUS_GOOD
-# from volttron.platform.vip.agent import Agent, Core, PubSub
-# from volttron.platform.vip.agent.subsystems.query import Query
-
-utils.setup_logging()
-_log = logging.getLogger(__name__)
-__version__ = '3.3'
+setup_logging(level=logging.DEBUG)
+_log = utils.get_logger()
+#_log.setLevel(logging.DEBUG)
+__version__ = '4.0'
 DEFAULT_MESSAGE = 'Listener Message'
-DEFAULT_AGENTID = "listener"
-DEFAULT_HEARTBEAT_PERIOD = 5
+DEFAULT_HEARTBEAT_PERIOD = 30
 
 
 class ListenerAgent(Agent):
@@ -54,10 +49,8 @@ class ListenerAgent(Agent):
     def __init__(self, config_path, **kwargs):
         super().__init__(**kwargs)
         self.config = utils.load_config(config_path)
-        self._agent_id = self.config.get('agentid', DEFAULT_AGENTID)
         self._message = self.config.get('message', DEFAULT_MESSAGE)
-        self._heartbeat_period = self.config.get('heartbeat_period',
-                                                 DEFAULT_HEARTBEAT_PERIOD)
+        self._heartbeat_period = self.config.get('heartbeat_period', DEFAULT_HEARTBEAT_PERIOD)
         runtime_limit = int(self.config.get('runtime_limit', 0))
         if runtime_limit and runtime_limit > 0:
             stop_time = datetime.datetime.now() + datetime.timedelta(seconds=runtime_limit)
@@ -82,23 +75,22 @@ class ListenerAgent(Agent):
             self._logfn = _log.info
 
     @Core.receiver( 'onsetup')
-    def onsetup(self,            sender,                **kwargs):
+    def onsetup(self, sender, **kwargs):
         # Demonstrate accessing a value from the config file
         _log.info(self.config.get('message', DEFAULT_MESSAGE))
-        self._agent_id = self.config.get('agentid')
 
     @Core.receiver('onstart')
     def onstart(self, sender, **kwargs):
-        _log.debug("VERSION IS: {}".format(self.core.version()))
+        # TODO: Bring back version?
+        #_log.debug("VERSION IS: {}".format(self.core.version()))
         if self._heartbeat_period != 0:
-            _log.debug(f"Heartbeat starting for {self.core.identity}, published every {self._heartbeat_period}s")
+            _log.debug(f"Heartbeat starting for {self.core.identity} published every {self._heartbeat_period}")
             self.vip.heartbeat.start_with_period(self._heartbeat_period)
             self.vip.health.set_status(STATUS_GOOD, self._message)
-        _log.info('How to do dynamic loaded functions?')
-        # query = Query(self.core)
-        # _log.info('query: %r', query.query('serverkey').get())
 
-    @PubSub.subscribe('pubsub', '', all_platforms=True)
+        self.vip.pubsub.subscribe(peer='pubsub', prefix='', callback=self.on_match)
+
+    #@PubSub.subscribe('pubsub', '', all_platforms=True)
     def on_match(self, peer, sender, bus, topic, headers, message):
         """Use match_all to receive all messages and print them out."""
         self._logfn(
@@ -115,6 +107,9 @@ def main():
         vip_main(ListenerAgent, version=__version__)
     except Exception as e:
         _log.exception('unhandled exception')
+        _log.exception(e)
+    finally:
+        _log.debug("Exiting")
 
 
 if __name__ == '__main__':

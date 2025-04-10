@@ -27,8 +27,11 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 import gevent
+from cattrs.fns import identity
 from volttrontesting import PlatformWrapper
 from volttron.client.known_identities import CONTROL
+
+from volttrontesting.platformwrapper import InstallAgentOptions
 
 
 def test_startup_instance(volttron_instance: PlatformWrapper):
@@ -42,15 +45,14 @@ def test_startup_instance(volttron_instance: PlatformWrapper):
     assert vi.is_running()
 
     # agent identity should be
-    auuid = vi.install_agent(agent_dir=agent_pth,
-                             start=False)
+    auuid = vi.install_agent(agent_dir=agent_pth, install_options=InstallAgentOptions(start=False))
     assert auuid is not None
     time.sleep(1)
     started = vi.start_agent(auuid)
 
     assert started
     assert vi.is_agent_running(auuid)
-    listening = vi.build_agent()
+    listening = vi.build_agent(identity="world")
     listening.callback = MagicMock(name="callback")
     listening.callback.reset_mock()
 
@@ -76,8 +78,9 @@ def test_startup_instance(volttron_instance: PlatformWrapper):
     assert 'TimeStamp' in call_args[4]
     assert 'GOOD' in call_args[5]
 
-    stopped = vi.stop_agent(auuid)
-    print('STOPPED: ', stopped)
-    removed = vi.remove_agent(auuid)
-    print('REMOVED: ', removed)
-    listening.core.stop()
+    # TODO: Setup test in platform testing to deal with the stop issue.
+    # stopped = vi.stop_agent(auuid)
+    # print('STOPPED: ', stopped)
+    # removed = vi.remove_agent(auuid)
+    # print('REMOVED: ', removed)
+    # listening.core.stop()

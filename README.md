@@ -1,29 +1,15 @@
 ![Passing?](https://github.com/eclipse-volttron/volttron-listener/actions/workflows/run-tests.yml/badge.svg)
-[![pypi version](https://img.shields.io/pypi/v/volttron.svg)](https://pypi.org/project/volttron/)
+[![pypi version](https://img.shields.io/pypi/v/volttron-listener.svg)](https://pypi.org/project/volttron-listener/)
 
 The volttron-listener agent prints all message traffic across a VOLTTRON bus to standard out.
 
-## Requirements
+## Pre-requisite
 
- - Python >= 3.8
+Before installing this agent, VOLTTRON (>=11.0.0rc0) should be installed and running.  Its virtual environment should be active.
+Information on how to install of the VOLTTRON platform can be found
+[here](https://github.com/eclipse-volttron/volttron-core/tree/v10)
 
 ## Installation
-
-Create and activate a virtual environment.
-
-```shell
-python -m venv env
-source env/bin/activate
-```
-
-Installing volttron-listener requires a running volttron instance.
-
-```shell
-pip install volttron
-
-# Start platform with output going to volttron.log
-volttron -vv -l volttron.log &
-```
 
 Install and start the volttron-listener.
 

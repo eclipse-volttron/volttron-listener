@@ -30,4 +30,7 @@ path = Path(__file__).parent.parent.joinpath('src')
 if path.resolve() not in sys.path:
     sys.path.insert(0, path.resolve().as_posix())
 
-from volttrontesting.fixtures.volttron_platform_fixtures import *
+from volttrontesting.fixtures import get_pyproject_toml
+from volttrontesting.fixtures.volttron_platform_fixtures import volttron_instance
+
+
