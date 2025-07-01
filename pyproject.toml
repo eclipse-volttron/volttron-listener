@@ -10,6 +10,7 @@ readme = "README.md"
 repository = "https://github.com/eclipse-volttron/volttron-listener"
 homepage = "https://github.com/eclipse-volttron/volttron-listener"
 keywords = []
+include =[{path="volttron-listener-default-vip-id", format = ["sdist", "wheel"]}]
 packages = [
     { include = "listener", from = "src" },
 ]
@@ -24,20 +25,15 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-volttron-core = {path="../volttron-core", develop = true}
+volttron-core = ">=2.0.0rc13"
 
 [tool.poetry.group.dev]
 optional = true
 
 [tool.poetry.group.dev.dependencies]
 volttron-testing = {path = "../volttron-testing", develop = true}
-volttron-lib-zmq = {path = "../volttron-lib-zmq", develop = true}
-volttron-lib-auth = {path = "../volttron-lib-auth", develop = true}
+#volttron-core = {path = "../volttron-core", develop = true}
 
-# These will either be brought in elsewhere if you have a multi-project environment or uncomment locally to work
-# against a specific path.
-#volttron-lib-zmq = {path = "../volttron-lib-zmq", develop = true}
-#volttron-lib-auth = {path = "../volttron-lib-auth", develop = true}
 
 [tool.poetry.scripts]
 volttron-listener-agent = "listener.agent:main"

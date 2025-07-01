@@ -34,7 +34,7 @@ from volttron.client.logs import setup_logging
 import volttron.utils as utils
 
 setup_logging(level=logging.DEBUG)
-_log = utils.get_logger()
+_log = logging.getLogger(__name__)
 #_log.setLevel(logging.DEBUG)
 __version__ = '4.0'
 DEFAULT_MESSAGE = 'Listener Message'
@@ -88,7 +88,7 @@ class ListenerAgent(Agent):
             self.vip.heartbeat.start_with_period(self._heartbeat_period)
             self.vip.health.set_status(STATUS_GOOD, self._message)
 
-        self.vip.pubsub.subscribe(peer='pubsub', prefix='', callback=self.on_match)
+        self.vip.pubsub.subscribe(peer='pubsub', prefix='', callback=self.on_match, all_platforms=True)
 
     #@PubSub.subscribe('pubsub', '', all_platforms=True)
     def on_match(self, peer, sender, bus, topic, headers, message):
