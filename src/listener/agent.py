@@ -30,15 +30,13 @@ from volttron.client.vip.agent.subsystems.configstore import VALID_ACTIONS
 from volttron.utils.commands import vip_main
 from volttron.client.messaging.health import STATUS_GOOD
 from volttron.client.vip.agent import Agent, Core, PubSub
-from volttron.client.logs import setup_logging
 import volttron.utils as utils
 
-setup_logging(level=logging.DEBUG)
 _log = logging.getLogger(__name__)
 #_log.setLevel(logging.DEBUG)
 __version__ = '4.0'
 DEFAULT_MESSAGE = 'Listener Message'
-DEFAULT_HEARTBEAT_PERIOD = 30
+DEFAULT_HEARTBEAT_PERIOD = 5
 
 
 class ListenerAgent(Agent):

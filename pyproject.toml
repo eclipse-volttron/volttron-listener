@@ -54,7 +54,5 @@ column_limit = 120
 split_before_logical_operator = true
 
 [build-system]
-requires = [
-    "poetry-core>=1.2.2",
-]
+requires = ["poetry-core>=2.0.0"]
 build-backend = "poetry.core.masonry.api"
