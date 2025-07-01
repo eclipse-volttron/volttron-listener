@@ -31,7 +31,7 @@ volttron-core = ">=2.0.0rc13"
 optional = true
 
 [tool.poetry.group.dev.dependencies]
-volttron-testing = {path = "../volttron-testing", develop = true}
+#volttron-testing = {path = "../volttron-testing", develop = true}
 #volttron-core = {path = "../volttron-core", develop = true}
 
 
