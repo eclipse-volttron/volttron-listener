@@ -25,7 +25,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-volttron-core = ">=2.0.0rc13"
+volttron-core = ">=2.0.0rc36"
 
 [tool.poetry.group.dev]
 optional = true
